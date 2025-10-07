@@ -1,136 +1,172 @@
 import 'package:flutter/material.dart';
 import '../config/app_constants.dart';
+import '../utils/visual_effects.dart';
+import '../utils/animation_helpers.dart';
 
 class ModernWidgets {
-  // Modern gradient button
+  // Modern gradient button with enhanced design
   static Widget gradientButton({
     required String text,
     required VoidCallback onPressed,
     double width = double.infinity,
     double height = 50,
     bool isLoading = false,
+    IconData? icon,
+    Color? startColor,
+    Color? endColor,
   }) {
-    return Container(
-      width: width,
-      height: height,
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primaryPurple, AppColors.lightPurple],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryPurple.withOpacity(0.3),
-            blurRadius: 8,
-            offset: const Offset(0, 4),
+    return AnimationHelpers.scaleTransition(
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              startColor ?? AppColors.primaryPurple,
+              endColor ?? AppColors.lightPurple,
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
           ),
-        ],
+          borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
+          boxShadow: VisualEffects.modernShadow(
+            color: startColor ?? AppColors.primaryPurple,
+            opacity: 0.3,
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
+            onTap: isLoading ? null : onPressed,
+            child: Container(
+              alignment: Alignment.center,
+              child: isLoading
+                  ? const SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.5,
+                        valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      ),
+                    )
+                  : Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        if (icon != null) ...[
+                          Icon(icon, color: Colors.white, size: 20),
+                          const SizedBox(width: 8),
+                        ],
+                        Text(
+                          text,
+                          style: AppTextStyles.subtitle1.copyWith(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ],
+                    ),
+            ),
+          ),
+        ),
       ),
+    );
+  }
+
+  // Modern glass card effect with enhanced blur
+  static Widget glassCard({
+    required Widget child,
+    double blur = 15,
+    double opacity = 0.12,
+    Color? color,
+    EdgeInsets? padding,
+    VoidCallback? onTap,
+  }) {
+    return VisualEffects.glassmorphism(
+      blur: blur,
+      opacity: opacity,
+      color: color ?? Colors.white,
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
-          onTap: isLoading ? null : onPressed,
-          child: Container(
-            alignment: Alignment.center,
-            child: isLoading
-                ? const SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                    ),
-                  )
-                : Text(
-                    text,
-                    style: AppTextStyles.subtitle1.copyWith(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+          borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+          onTap: onTap,
+          child: Padding(
+            padding: padding ?? const EdgeInsets.all(AppConstants.defaultPadding),
+            child: child,
           ),
         ),
       ),
     );
   }
 
-  // Modern glass card effect
-  static Widget glassCard({
-    required Widget child,
-    double blur = 10,
-    double opacity = 0.1,
-    Color? color,
-  }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: (color ?? Colors.white).withOpacity(opacity),
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        border: Border.all(
-          color: Colors.white.withOpacity(0.2),
-          width: 1,
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 20,
-            offset: const Offset(0, 10),
-          ),
-        ],
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-        child: child,
-      ),
-    );
-  }
-
-  // Modern floating action button
+  // Enhanced modern FAB with multiple styles
   static Widget modernFAB({
     required VoidCallback onPressed,
     required IconData icon,
     String? heroTag,
+    FABStyle style = FABStyle.gradient,
+    Color? backgroundColor,
+    double size = 56,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: const LinearGradient(
-          colors: [AppColors.primaryPurple, AppColors.lightPurple],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.primaryPurple.withOpacity(0.4),
-            blurRadius: 15,
-            offset: const Offset(0, 8),
-          ),
-        ],
-      ),
-      child: FloatingActionButton(
-        heroTag: heroTag,
-        onPressed: onPressed,
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Icon(
-          icon,
-          color: Colors.white,
-          size: 28,
-        ),
-      ),
+    Widget fabContent = Icon(
+      icon,
+      color: Colors.white,
+      size: size * 0.5,
     );
+
+    switch (style) {
+      case FABStyle.gradient:
+        return VisualEffects.modernFloatingActionButton(
+          onPressed: onPressed,
+          backgroundColor: backgroundColor,
+          heroTag: heroTag,
+          child: fabContent,
+        );
+      case FABStyle.glass:
+        return SizedBox(
+          width: size,
+          height: size,
+          child: VisualEffects.glassmorphism(
+            child: FloatingActionButton(
+              heroTag: heroTag,
+              onPressed: onPressed,
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              child: fabContent,
+            ),
+          ),
+        );
+      case FABStyle.neumorphism:
+        return VisualEffects.neumorphismCard(
+          child: FloatingActionButton(
+            heroTag: heroTag,
+            onPressed: onPressed,
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            child: Icon(
+              icon,
+              color: AppColors.primaryPurple,
+              size: size * 0.5,
+            ),
+          ),
+        );
+    }
   }
 
-  // Modern app bar with gradient
+  // Enhanced modern app bar with customization
   static PreferredSizeWidget modernAppBar({
     required String title,
     List<Widget>? actions,
     Widget? leading,
     bool centerTitle = true,
+    AppBarStyle style = AppBarStyle.gradient,
+    Color? backgroundColor,
+    double elevation = 0,
   }) {
-    return AppBar(
+    final appBar = AppBar(
       title: Text(
         title,
         style: AppTextStyles.headline2.copyWith(
@@ -141,42 +177,55 @@ class ModernWidgets {
       centerTitle: centerTitle,
       leading: leading,
       actions: actions,
-      elevation: 0,
-      flexibleSpace: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            colors: [AppColors.primaryPurple, AppColors.darkPurple],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-        ),
-      ),
+      elevation: elevation,
+      backgroundColor: style == AppBarStyle.solid 
+          ? (backgroundColor ?? AppColors.primaryPurple)
+          : Colors.transparent,
+      flexibleSpace: style == AppBarStyle.gradient
+          ? Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [AppColors.primaryPurple, AppColors.darkPurple],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+            )
+          : style == AppBarStyle.glass
+              ? VisualEffects.glassmorphism(
+                  color: AppColors.primaryPurple,
+                  opacity: 0.8,
+                  borderRadius: BorderRadius.zero,
+                  child: Container(),
+                )
+              : null,
     );
+
+    return appBar;
   }
 
-  // Modern card with hover effect
-  static Widget hoverCard({
+  // Enhanced hover card with multiple interaction states
+  static Widget interactiveCard({
     required Widget child,
     required VoidCallback onTap,
-    double elevation = 2,
+    double elevation = 3,
+    Color? color,
+    EdgeInsets? padding,
+    bool enableHover = true,
+    InteractionStyle style = InteractionStyle.elevation,
   }) {
-    return Card(
-      elevation: elevation,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(AppConstants.borderRadius),
+    return AnimationHelpers.scaleTransition(
+      child: VisualEffects.modernCard(
+        color: color,
+        elevation: elevation,
+        padding: padding,
         onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(AppConstants.defaultPadding),
-          child: child,
-        ),
+        child: child,
       ),
     );
   }
 
-  // Modern text field with floating label
+  // Enhanced modern text field with validation states
   static Widget modernTextField({
     required String label,
     required TextEditingController controller,
@@ -186,43 +235,71 @@ class ModernWidgets {
     VoidCallback? onSuffixIconPressed,
     String? Function(String?)? validator,
     TextInputType? keyboardType,
+    String? hintText,
+    bool enabled = true,
+    FocusNode? focusNode,
+    void Function(String)? onChanged,
+    TextFieldStyle style = TextFieldStyle.modern,
   }) {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 5),
-          ),
-        ],
+        boxShadow: style == TextFieldStyle.elevated
+            ? VisualEffects.modernShadow(
+                blurRadius: 8,
+                offset: const Offset(0, 4),
+                opacity: 0.1,
+              )
+            : null,
       ),
       child: TextFormField(
         controller: controller,
         obscureText: obscureText,
         validator: validator,
         keyboardType: keyboardType,
-        style: AppTextStyles.body1,
+        enabled: enabled,
+        focusNode: focusNode,
+        onChanged: onChanged,
+        style: AppTextStyles.body1.copyWith(
+          color: enabled ? AppColors.black : AppColors.grey,
+        ),
         decoration: InputDecoration(
           labelText: label,
+          hintText: hintText,
           labelStyle: AppTextStyles.body1.copyWith(color: AppColors.grey),
-          prefixIcon: prefixIcon != null ? Icon(prefixIcon, color: AppColors.primaryPurple) : null,
+          hintStyle: AppTextStyles.body1.copyWith(color: AppColors.lightGrey),
+          prefixIcon: prefixIcon != null 
+              ? Icon(prefixIcon, color: AppColors.primaryPurple, size: 20)
+              : null,
           suffixIcon: suffixIcon != null 
               ? IconButton(
-                  icon: Icon(suffixIcon, color: AppColors.primaryPurple),
+                  icon: Icon(suffixIcon, color: AppColors.primaryPurple, size: 20),
                   onPressed: onSuffixIconPressed,
                 )
               : null,
           filled: true,
-          fillColor: Colors.white,
+          fillColor: style == TextFieldStyle.glass
+              ? Colors.white.withOpacity(0.1)
+              : Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
-            borderSide: BorderSide.none,
+            borderSide: style == TextFieldStyle.outlined
+                ? const BorderSide(color: AppColors.lightGrey)
+                : BorderSide.none,
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
+            borderSide: style == TextFieldStyle.outlined
+                ? const BorderSide(color: AppColors.lightGrey)
+                : BorderSide.none,
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
             borderSide: const BorderSide(color: AppColors.primaryPurple, width: 2),
+          ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
+            borderSide: const BorderSide(color: AppColors.error, width: 2),
           ),
           contentPadding: const EdgeInsets.symmetric(
             horizontal: AppConstants.defaultPadding,
@@ -233,35 +310,43 @@ class ModernWidgets {
     );
   }
 
-  // Modern bottom sheet
+  // Enhanced bottom sheet with drag handle
   static void showModernBottomSheet({
     required BuildContext context,
     required Widget child,
     double? height,
+    bool isScrollControlled = true,
+    bool showDragHandle = true,
+    Color? backgroundColor,
   }) {
     showModalBottomSheet(
       context: context,
-      isScrollControlled: true,
+      isScrollControlled: isScrollControlled,
       backgroundColor: Colors.transparent,
       builder: (context) => Container(
         height: height ?? MediaQuery.of(context).size.height * 0.7,
-        decoration: const BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(
+        decoration: BoxDecoration(
+          color: backgroundColor ?? Colors.white,
+          borderRadius: const BorderRadius.vertical(
             top: Radius.circular(AppConstants.largePadding),
+          ),
+          boxShadow: VisualEffects.modernShadow(
+            blurRadius: 20,
+            offset: const Offset(0, -5),
           ),
         ),
         child: Column(
           children: [
-            Container(
-              width: 50,
-              height: 5,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.grey,
-                borderRadius: BorderRadius.circular(10),
+            if (showDragHandle)
+              Container(
+                width: 50,
+                height: 5,
+                margin: const EdgeInsets.symmetric(vertical: 12),
+                decoration: BoxDecoration(
+                  color: AppColors.grey.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-            ),
             Expanded(child: child),
           ],
         ),
@@ -269,20 +354,41 @@ class ModernWidgets {
     );
   }
 
-  // Modern snackbar
+  // Enhanced snackbar with action button
   static void showModernSnackBar({
     required BuildContext context,
     required String message,
-    bool isSuccess = true,
-    Duration duration = const Duration(seconds: 3),
+    SnackBarType type = SnackBarType.info,
+    Duration duration = const Duration(seconds: 4),
+    String? actionLabel,
+    VoidCallback? onActionPressed,
   }) {
+    Color backgroundColor;
+    IconData icon;
+
+    switch (type) {
+      case SnackBarType.success:
+        backgroundColor = AppColors.success;
+        icon = Icons.check_circle_outline;
+        break;
+      case SnackBarType.error:
+        backgroundColor = AppColors.error;
+        icon = Icons.error_outline;
+        break;
+      case SnackBarType.warning:
+        backgroundColor = AppColors.warning;
+        icon = Icons.warning_amber_outlined;
+        break;
+      case SnackBarType.info:
+        backgroundColor = AppColors.info;
+        icon = Icons.info_outline;
+        break;
+    }
+
     final snackBar = SnackBar(
       content: Row(
         children: [
-          Icon(
-            isSuccess ? Icons.check_circle : Icons.error,
-            color: Colors.white,
-          ),
+          Icon(icon, color: Colors.white, size: 20),
           const SizedBox(width: 12),
           Expanded(
             child: Text(
@@ -292,7 +398,14 @@ class ModernWidgets {
           ),
         ],
       ),
-      backgroundColor: isSuccess ? AppColors.success : AppColors.error,
+      action: actionLabel != null && onActionPressed != null
+          ? SnackBarAction(
+              label: actionLabel,
+              textColor: Colors.white,
+              onPressed: onActionPressed,
+            )
+          : null,
+      backgroundColor: backgroundColor,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
@@ -303,4 +416,53 @@ class ModernWidgets {
 
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
+
+  // Loading overlay with modern design
+  static Widget loadingOverlay({
+    required bool isLoading,
+    required Widget child,
+    String? loadingText,
+    Color? overlayColor,
+  }) {
+    return Stack(
+      children: [
+        child,
+        if (isLoading)
+          Container(
+            color: (overlayColor ?? Colors.black).withOpacity(0.5),
+            child: Center(
+              child: VisualEffects.glassmorphism(
+                child: Padding(
+                  padding: const EdgeInsets.all(AppConstants.largePadding),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation<Color>(AppColors.primaryPurple),
+                      ),
+                      if (loadingText != null) ...[
+                        const SizedBox(height: 16),
+                        Text(
+                          loadingText,
+                          style: AppTextStyles.body1.copyWith(
+                            color: AppColors.darkGrey,
+                          ),
+                        ),
+                      ],
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+      ],
+    );
+  }
 }
+
+// Enums for different styles
+enum FABStyle { gradient, glass, neumorphism }
+enum AppBarStyle { gradient, glass, solid }
+enum InteractionStyle { elevation, scale, glow }
+enum TextFieldStyle { modern, glass, outlined, elevated }
+enum SnackBarType { success, error, warning, info }
