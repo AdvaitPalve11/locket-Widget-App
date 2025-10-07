@@ -63,11 +63,19 @@ class AppColors {
   static const lightGrey = Color(0xFFF5F5F5);
   static const darkGrey = Color(0xFF424242);
 
-  // Status Colors
-  static const success = Color(0xFF4CAF50);
-  static const error = Color(0xFFF44336);
-  static const warning = Color(0xFFFF9800);
-  static const info = Color(0xFF2196F3);
+  // Status Colors - Modern and comfy
+  static const success = Color(0xFF00C853);
+  static const error = Color(0xFFFF1744);
+  static const warning = Color(0xFFFFB300);
+  static const info = Color(0xFF00B0FF);
+
+  // Additional aesthetic colors
+  static const backgroundGradientStart = Color(0xFFF8F9FF);
+  static const backgroundGradientEnd = Color(0xFFFFFFFF);
+  static const cardShadow = Color(0x1A000000);
+  static const shimmerBase = Color(0xFFE0E0E0);
+  static const shimmerHighlight = Color(0xFFF5F5F5);
+  static const glassMorphismBorder = Color(0x33FFFFFF);
 
   // Dark Mode Colors
   static const darkBackground = Color(0xFF121212);
