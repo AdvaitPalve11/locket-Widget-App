@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
-import 'screens/auth/login_screen.dart';
-import 'screens/home/home_screen.dart';
+import 'screens/auth/modern_login_screen.dart';
+import 'screens/home/modern_home_screen.dart';
 import 'services/auth_service.dart';
 import 'services/friend_service.dart';
 import 'config/theme_manager.dart';
@@ -57,9 +57,9 @@ class AuthWrapper extends StatelessWidget {
         if (snapshot.hasData) {
           // Initialize user document when authenticated
           FriendService().initializeUser();
-          return const HomeScreen();
+          return const ModernHomeScreen();
         } else {
-          return const LoginScreen();
+          return const ModernLoginScreen();
         }
       },
     );

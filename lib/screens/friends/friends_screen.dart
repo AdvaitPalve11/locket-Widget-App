@@ -144,10 +144,10 @@ class _FriendsScreenState extends State<FriendsScreen> {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: const Color(0xFF6C5CE7).withOpacity(0.3)),
+        border: Border.all(color: const Color(0xFF6C5CE7).withValues(alpha: 0.3)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
@@ -195,7 +195,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                 onPressed: () => _acceptFriendRequest(request['id']),
                 icon: const Icon(Icons.check, color: Colors.green),
                 style: IconButton.styleFrom(
-                  backgroundColor: Colors.green.withOpacity(0.1),
+                  backgroundColor: Colors.green.withValues(alpha: 0.1),
                 ),
               ),
               const SizedBox(width: 8),
@@ -203,7 +203,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
                 onPressed: () => _rejectFriendRequest(request['id']),
                 icon: const Icon(Icons.close, color: Colors.red),
                 style: IconButton.styleFrom(
-                  backgroundColor: Colors.red.withOpacity(0.1),
+                  backgroundColor: Colors.red.withValues(alpha: 0.1),
                 ),
               ),
             ],
@@ -222,7 +222,7 @@ class _FriendsScreenState extends State<FriendsScreen> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
+            color: Colors.black.withValues(alpha: 0.05),
             blurRadius: 4,
             offset: const Offset(0, 2),
           ),
