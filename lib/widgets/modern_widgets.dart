@@ -279,7 +279,7 @@ class ModernWidgets {
               : null,
           filled: true,
           fillColor: style == TextFieldStyle.glass
-              ? Colors.white.withOpacity(0.1)
+              ? Colors.white.withValues(alpha: )
               : Colors.white,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(AppConstants.smallBorderRadius),
@@ -343,7 +343,7 @@ class ModernWidgets {
                 height: 5,
                 margin: const EdgeInsets.symmetric(vertical: 12),
                 decoration: BoxDecoration(
-                  color: AppColors.grey.withOpacity(0.3),
+                  color: AppColors.grey.withValues(alpha: ),
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),
@@ -429,7 +429,7 @@ class ModernWidgets {
         child,
         if (isLoading)
           Container(
-            color: (overlayColor ?? Colors.black).withOpacity(0.5),
+            color: (overlayColor ?? Colors.black).withValues(alpha: ),
             child: Center(
               child: VisualEffects.glassmorphism(
                 child: Padding(

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import '../utils/app_logger.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -34,7 +35,7 @@ class AuthService {
       );
       return result.user;
     } catch (e) {
-      print('Error registering: $e');
+      AppLogger.error('Error registering user', e, null, 'AuthService');
       return null;
     }
   }
@@ -44,7 +45,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (e) {
-      print('Error signing out: $e');
+      AppLogger.error('Error signing out user', e, null, 'AuthService');
     }
   }
 
@@ -53,7 +54,7 @@ class AuthService {
     try {
       await _auth.sendPasswordResetEmail(email: email);
     } catch (e) {
-      print('Error sending password reset email: $e');
+      AppLogger.error('Error sending password reset email', e, null, 'AuthService');
     }
   }
 }

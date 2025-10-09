@@ -25,7 +25,7 @@ class _EnhancedCameraScreenState extends State<EnhancedCameraScreen> {
   
   // Caption styling options
   Color _captionColor = Colors.white;
-  double _captionFontSize = 18.0;
+  final double _captionFontSize = 18.0;
   FontWeight _captionFontWeight = FontWeight.normal;
   TextAlign _captionAlignment = TextAlign.center;
 
