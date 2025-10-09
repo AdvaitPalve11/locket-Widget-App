@@ -7,10 +7,16 @@ import 'services/auth_service.dart';
 import 'services/friend_service.dart';
 import 'config/theme_manager.dart';
 import 'services/notification_service.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  
+  // Initialize Firebase with platform-specific options
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  
   await NotificationService.initialize();
   runApp(const LocketApp());
 }

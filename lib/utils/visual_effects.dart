@@ -17,12 +17,12 @@ class VisualEffects {
           color: (color ?? Colors.white).withOpacity(opacity),
           borderRadius: borderRadius ?? BorderRadius.circular(AppConstants.borderRadius),
           border: Border.all(
-            color: Colors.white.withValues(alpha: ),
+            color: Colors.white.withValues(alpha: 0.3),
             width: 1.5,
           ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: ),
+              color: Colors.black.withValues(alpha: 0.1),
               blurRadius: blur,
               offset: const Offset(0, 8),
             ),
@@ -75,8 +75,8 @@ class VisualEffects {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: colors ?? [
-            AppColors.primaryPurple.withValues(alpha: ),
-            AppColors.lightPurple.withValues(alpha: ),
+            AppColors.primaryPurple.withValues(alpha: 0.8),
+            AppColors.lightPurple.withValues(alpha: 0.6),
             Colors.white,
           ],
           begin: begin,
@@ -114,7 +114,7 @@ class VisualEffects {
                       width: 4 + (index % 3),
                       height: 4 + (index % 3),
                       decoration: BoxDecoration(
-                        color: particleColor.withValues(alpha: ),
+                        color: particleColor.withValues(alpha: 0.7),
                         shape: BoxShape.circle,
                       ),
                     ),
@@ -163,12 +163,12 @@ class VisualEffects {
       decoration: BoxDecoration(
         boxShadow: [
           BoxShadow(
-            color: glowColor.withValues(alpha: ),
+            color: glowColor.withValues(alpha: 0.6),
             blurRadius: glowRadius,
             spreadRadius: spread,
           ),
           BoxShadow(
-            color: glowColor.withValues(alpha: ),
+            color: glowColor.withValues(alpha: 0.3),
             blurRadius: glowRadius * 2,
             spreadRadius: spread * 2,
           ),
@@ -189,8 +189,8 @@ class VisualEffects {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: borderRadius ?? BorderRadius.circular(AppConstants.borderRadius),
-        splashColor: rippleColor.withValues(alpha: ),
-        highlightColor: rippleColor.withValues(alpha: ),
+        splashColor: rippleColor.withValues(alpha: 0.3),
+        highlightColor: rippleColor.withValues(alpha: 0.1),
         onTap: onTap,
         child: child,
       ),
@@ -210,7 +210,7 @@ class VisualEffects {
         gradient: LinearGradient(
           colors: [
             backgroundColor ?? AppColors.primaryPurple,
-            (backgroundColor ?? AppColors.primaryPurple).withValues(alpha: ),
+            (backgroundColor ?? AppColors.primaryPurple).withValues(alpha: 0.7),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
